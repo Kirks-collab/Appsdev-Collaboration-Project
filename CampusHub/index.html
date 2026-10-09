@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CCTC Campus Information, Shop, Events, Announcements, and Group Chat System.">
+<title>CCTC CampusHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <div class="brand-mark">CCTC</div>
+                <div>
+                    <span class="brand-name">CampusHub</span>
+                    <p class="brand-subtitle">Consolatrix College of Toledo City</p>
+                </div>
+            </div>
+
+            <h1>Welcome to CCTC</h1>
+            <p class="auth-intro">This application helps students and teachers check school information, events, announcements, products, and campus communication.</p>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-field">
+                    <label for="emailInput">Email</label>
+                    <input id="emailInput" type="email" placeholder="name@cctc.edu.ph" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="passwordInput">Password</label>
+                    <input id="passwordInput" type="password" placeholder="Password" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="roleInput">Login as</label>
+                    <select id="roleInput">
+                        <option value="STUDENT">Student</option>
+                        <option value="TEACHER">Teacher</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+            </form>
+
+            <div class="demo-row">
+                <button type="button" class="demo-button" data-demo="student">Quick Student Login</button>
+                <button type="button" class="demo-button demo-button-alt" data-demo="teacher">Quick Teacher Login</button>
+            </div>
+
+            <div id="loginError" class="login-error hidden"></div>
+        </div>
+    </div>
+
+    <div id="mainApp" class="app-shell hidden">
+        <header class="navbar">
+            <button type="button" class="logo" data-page-link="home" aria-label="Go to home page">
+                <span class="logo-mark">CCTC</span>
+                <span>CampusHub</span>
+            </button>
+
+            <div class="nav-controls">
+                <button type="button" id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">🌓</button>
+            </div>
+
+            <div class="topbar-tools" aria-label="Quick access and profile">
+                <label class="global-search" aria-label="Search">
+                    <span>⌕</span>
+                    <input type="search" placeholder="Search" />
+                </label>
+                <button type="button" class="icon-button" aria-label="Notifications">🔔</button>
+                <div class="profile-chip" aria-label="User profile">
+                    <div class="profile-avatar">K</div>
+                    <div class="profile-meta">
+                        <strong id="topbarUserName">Kyth</strong>
+                        <small id="topbarUserRole">Student</small>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-links" id="navLinks" aria-label="Main navigation"></nav>
+
+            <button type="button" class="cart-button" id="cartButton" aria-label="View cart">
+                🛒
+                <span class="cart-badge" id="cartBadge" hidden>0</span>
+            </button>
+
+            <button type="button" class="mobile-menu-button" id="mobileMenuButton" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+        </header>
+
+        <main id="app">
+            <section id="page-home" class="page active-page"></section>
+            <section id="page-shop" class="page"></section>
+            <section id="page-events" class="page"></section>
+            <section id="page-chat" class="page"></section>
+            <section id="page-dashboard" class="page"></section>
+            <section id="page-profile" class="page"></section>
+        </main>
+    </div>
+
+    <div id="productModal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+        <div class="modal-panel">
+            <button type="button" class="modal-close" data-close-modal="productModal" aria-label="Close">×</button>
+            <h3 id="productModalTitle">Product</h3>
+            <form id="productForm">
+                <input type="hidden" id="productTypeInput" value="CANTEEN">
+                <input type="hidden" id="productModeInput" value="add">
+                <input type="hidden" id="productIdInput" value="">
+
+                <div class="form-field">
+                    <label for="productNameInput">Product name</label>
+                    <input id="productNameInput" type="text" maxlength="80" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="productImageInput">Image</label>
+                    <input id="productImageInput" type="text" maxlength="200" placeholder="🍔 or image URL">
+                </div>
+
+                <div class="form-field">
+                    <label for="productCategoryInput">Category</label>
+                    <input id="productCategoryInput" type="text" maxlength="50" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="productPriceInput">Price (₱)</label>
+                    <input id="productPriceInput" type="number" min="0" step="1" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="productDescriptionInput">Description</label>
+                    <textarea id="productDescriptionInput" rows="3" maxlength="220" required></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="productAvailabilityInput">Availability</label>
+                    <select id="productAvailabilityInput">
+                        <option value="available">Available</option>
+                        <option value="unavailable">Unavailable</option>
+                    </select>
+                </div>
+
+                <div class="form-field" id="sizesFieldWrap">
+                    <label for="productSizesInput">Size and availability (one per line)</label>
+                    <textarea id="productSizesInput" rows="5" placeholder="Small: Available&#10;Medium: Available&#10;Large: Unavailable"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width" id="productSubmitButton">Save product</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="eventModal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+        <div class="modal-panel">
+            <button type="button" class="modal-close" data-close-modal="eventModal" aria-label="Close">×</button>
+            <h3 id="eventModalTitle">Event</h3>
+            <form id="eventForm">
+                <input type="hidden" id="eventModeInput" value="add">
+                <input type="hidden" id="eventIdInput" value="">
+
+                <div class="form-field">
+                    <label for="eventTitleInput">Title</label>
+                    <input id="eventTitleInput" type="text" maxlength="80" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="eventDateInput">Date</label>
+                    <input id="eventDateInput" type="date" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="eventTimeInput">Time</label>
+                    <input id="eventTimeInput" type="time" required>
+                </div>
+
+
+
+                <div class="form-field">
+                    <label for="eventLocationInput">Location</label>
+                    <input id="eventLocationInput" type="text" maxlength="100" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="eventImageInput">Image URL or emoji</label>
+                    <input id="eventImageInput" type="text" maxlength="200" placeholder="🎉 or https://...">
+                </div>
+
+                <div class="form-field">
+                    <label for="eventDescriptionInput">Description</label>
+                    <textarea id="eventDescriptionInput" rows="4" maxlength="400" required></textarea>
+                </div>
+
+                
+                <button type="submit" class="btn btn-primary full-width" id="eventSubmitButton">Save event</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="announcementModal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+        <div class="modal-panel">
+            <button type="button" class="modal-close" data-close-modal="announcementModal" aria-label="Close">×</button>
+            <h3 id="announcementModalTitle">Announcement</h3>
+            <form id="announcementForm">
+                <input type="hidden" id="announcementModeInput" value="add">
+                <input type="hidden" id="announcementIdInput" value="">
+
+                <div class="form-field">
+                    <label for="announcementTitleInput">Title</label>
+                    <input id="announcementTitleInput" type="text" maxlength="80" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="announcementContentInput">Content</label>
+                    <textarea id="announcementContentInput" rows="5" maxlength="500" required></textarea>
+                </div>
+
+                
+                <button type="submit" class="btn btn-primary full-width" id="announcementSubmitButton">Save announcement</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+        <div class="modal-panel cart-panel">
+            <button type="button" class="modal-close" data-close-modal="cartModal" aria-label="Close">×</button>
+            <h3>Your cart</h3>
+            <div id="cartItems" class="cart-items"></div>
+            <div class="cart-summary">
+                <span>Total</span>
+                <strong id="cartTotal">₱0</strong>
+            </div>
+            <button type="button" class="btn btn-primary full-width" id="checkoutButton" data-checkout-cart="true">Pay now</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="./data/food.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
